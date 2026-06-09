@@ -1,0 +1,23 @@
+{
+  "name": "openai-agent-ts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Assistant general construit avec l'OpenAI Agents SDK (TypeScript)",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "smoke": "tsx src/smoke-test.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@openai/agents": "^0.2.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

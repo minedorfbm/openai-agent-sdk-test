@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Verification du typage : aucun appel API, tourne sur chaque push et PR (y compris forks).
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+
+  # Smoke test : fait de vrais appels API, donc seulement sur push vers main
+  # (pas sur les PR de forks, qui n'ont pas acces au secret).
+  smoke:
+    runs-on: ubuntu-latest
+    needs: typecheck
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - name: Verifier que le secret est configure
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Secret OPENAI_API_KEY absent. Ajoute-le dans Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+      - name: Smoke test
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_AGENT_MODEL: ${{ vars.OPENAI_AGENT_MODEL }}
+        run: npm run smoke
