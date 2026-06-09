@@ -1,5 +1,5 @@
 {
-  "name": "openai-agent-ts",
+  "name": "openai-agent-sdk-test",
   "version": "1.0.0",
   "private": true,
   "type": "module",

@@ -1,4 +1,4 @@
-# guardian-agent-ts
+# openai-agent-sdk-test
 
 Agent **Guardian** (WatchMyAgents — boucle Watch · Guardian · Shield) construit sur l'[OpenAI Agents SDK](https://developers.openai.com/api/docs/guides/agents) en TypeScript.
 
