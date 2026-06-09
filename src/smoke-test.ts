@@ -1,52 +1,23 @@
 import "dotenv/config";
+import { resolve } from "node:path";
 import { run } from "@openai/agents";
-import { assistant, MODEL } from "./agent.js";
+import { guardian, MODEL } from "./agent.js";
 
 /**
- * Smoke test : lance l'agent sur plusieurs entrees et verifie qu'il repond
- * sans erreur. Ce n'est PAS un test de qualite des reponses, juste un controle
- * "ca tourne" a faire avant un deploiement en prod.
+ * Smoke test de l'agent Guardian (vrais appels API). Vérifie que l'agent
+ * analyse la fixture et restitue les risques attendus. Sort en code 1 si échec.
  *
  *   npm run smoke
  *
- * Sortie : code 0 si tout passe, code 1 si au moins un cas echoue.
+ * NB : le cœur déterministe est testé sans API par `npm run selfcheck`.
  */
-
-interface Case {
-  name: string;
-  input: string;
-  /** Verifications optionnelles sur la reponse finale. */
-  expect?: (output: string) => boolean;
-}
-
-const cases: Case[] = [
-  {
-    name: "Reponse simple",
-    input: "Dis bonjour en une phrase.",
-  },
-  {
-    name: "Outil calculator",
-    input: "Combien font 12 % de 250 ?",
-    expect: (o) => o.includes("30"),
-  },
-  {
-    name: "Outil get_current_time",
-    input: "Quelle est la date d'aujourd'hui ?",
-  },
-  {
-    name: "Langue : anglais",
-    input: "Reply in English: what is 2 + 2?",
-    expect: (o) => o.includes("4"),
-  },
-];
-
-const TIMEOUT_MS = 60_000;
+const TIMEOUT_MS = 90_000;
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
     p,
     new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`timeout apres ${ms} ms`)), ms),
+      setTimeout(() => reject(new Error(`timeout après ${ms} ms`)), ms),
     ),
   ]);
 }
@@ -57,43 +28,43 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`Smoke test — modele ${MODEL} — ${cases.length} cas\n`);
+  console.log(`Smoke test Guardian — modèle ${MODEL}\n`);
+  const path = resolve("fixtures/example-export.json");
+  const started = Date.now();
 
-  let failures = 0;
+  try {
+    const result = await withTimeout(
+      run(guardian, `Analyse l'export situé ici : ${path}. Produis le rapport Guardian.`),
+      TIMEOUT_MS,
+    );
+    const out = (result.finalOutput ?? "").trim();
+    const ms = Date.now() - started;
 
-  for (const c of cases) {
-    const started = Date.now();
-    try {
-      const result = await withTimeout(run(assistant, c.input), TIMEOUT_MS);
-      const output = (result.finalOutput ?? "").trim();
-      const ms = Date.now() - started;
-
-      if (output.length === 0) {
-        failures++;
-        console.log(`FAIL  ${c.name} (${ms} ms) — reponse vide`);
-        continue;
-      }
-      if (c.expect && !c.expect(output)) {
-        failures++;
-        console.log(
-          `FAIL  ${c.name} (${ms} ms) — verification non satisfaite\n      reponse: ${output.slice(0, 120)}`,
-        );
-        continue;
-      }
-      console.log(`PASS  ${c.name} (${ms} ms) — ${output.slice(0, 80).replace(/\n/g, " ")}`);
-    } catch (err) {
-      failures++;
-      const ms = Date.now() - started;
-      console.log(`FAIL  ${c.name} (${ms} ms) — ${(err as Error).message}`);
+    if (out.length === 0) {
+      console.log(`FAIL  rapport vide (${ms} ms)`);
+      process.exit(1);
     }
-  }
 
-  console.log(`\n${cases.length - failures}/${cases.length} cas reussis.`);
-  if (failures > 0) {
-    console.error("Smoke test ECHOUE — ne pas deployer.");
+    // L'agent doit retrouver l'exfiltration PII (R04) — le risque critique de la fixture.
+    const lower = out.toLowerCase();
+    const mentionsR04 =
+      lower.includes("r04") || lower.includes("exfiltrat") || lower.includes("collect.example");
+    const mentionsCritical = lower.includes("critical") || lower.includes("critique") || out.includes("88");
+
+    console.log(`PASS  rapport produit (${ms} ms, ${out.length} car.)`);
+    console.log(`${mentionsR04 ? "PASS" : "FAIL"}  mentionne l'exfiltration / R04`);
+    console.log(`${mentionsCritical ? "PASS" : "FAIL"}  signale la sévérité critique`);
+    console.log("\n--- extrait du rapport ---\n" + out.slice(0, 600));
+
+    if (!mentionsR04 || !mentionsCritical) {
+      console.error("\nSmoke test ÉCHOUÉ — l'agent n'a pas restitué le risque critique attendu.");
+      process.exit(1);
+    }
+    console.log("\nSmoke test OK.");
+  } catch (err) {
+    console.log(`FAIL  ${(err as Error).message}`);
     process.exit(1);
   }
-  console.log("Smoke test OK.");
 }
 
 main().catch((err) => {

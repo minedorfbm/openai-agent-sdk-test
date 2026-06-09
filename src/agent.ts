@@ -1,83 +1,92 @@
+import { readFileSync } from "node:fs";
 import { Agent, tool } from "@openai/agents";
 import { z } from "zod";
+import { analyzeExport, parseExport } from "./pipeline.js";
+import { scoreRisk } from "./scoring.js";
+import { policiesForRisk, RISK_META } from "./policies.js";
+import { AGENT_TYPES } from "./types.js";
 
-/**
- * Modele utilise par l'agent. Surchargeable via la variable d'env
- * OPENAI_AGENT_MODEL pour pouvoir changer sans toucher au code.
- */
 export const MODEL = process.env.OPENAI_AGENT_MODEL ?? "gpt-5.4";
 
-/** Outil : renvoie la date/heure courante au format ISO. */
-const getCurrentTime = tool({
-  name: "get_current_time",
+/**
+ * Outil principal : analyse déterministe d'un export d'actions (Guardian §2).
+ * Tout le calcul (détection + scoring §5 + sélection de politiques §6) est fait
+ * en TS pur ; le modèle ne fait qu'orchestrer et rédiger.
+ */
+const analyzeExportFile = tool({
+  name: "analyze_export_file",
   description:
-    "Renvoie la date et l'heure actuelles (ISO 8601). A utiliser pour toute question sur 'aujourd'hui', 'maintenant', l'heure ou la date.",
+    "Analyse un fichier d'export d'actions (action-export.schema.json) et renvoie les risk-findings scorés + politiques suggérées. À appeler dès qu'on te donne un chemin d'export.",
   parameters: z.object({
-    timezone: z
-      .string()
-      .describe("Fuseau IANA, ex: 'Europe/Paris'. 'UTC' par defaut.")
-      .default("UTC"),
+    path: z.string().describe("Chemin vers le fichier JSON d'export d'actions."),
   }),
-  async execute({ timezone }) {
+  async execute({ path }) {
     try {
-      const now = new Date();
-      const formatted = new Intl.DateTimeFormat("fr-FR", {
-        timeZone: timezone,
-        dateStyle: "full",
-        timeStyle: "long",
-      }).format(now);
-      return JSON.stringify({ iso: now.toISOString(), timezone, formatted });
-    } catch {
+      const raw = JSON.parse(readFileSync(path, "utf8"));
+      const exp = parseExport(raw);
+      const result = analyzeExport(exp);
+      return JSON.stringify(result);
+    } catch (err) {
       return JSON.stringify({
-        iso: new Date().toISOString(),
-        timezone: "UTC",
-        note: `Fuseau '${timezone}' invalide, UTC utilise.`,
+        error: `Export illisible ou non conforme: ${(err as Error).message}`,
       });
     }
   },
 });
 
-/** Outil : evalue une expression arithmetique simple, sans eval(). */
-const calculator = tool({
-  name: "calculator",
+/** Recalcule un score (what-if) à partir de facteurs — formule §5, déterministe. */
+const scoreFinding = tool({
+  name: "score_finding",
   description:
-    "Evalue une expression arithmetique (nombres, + - * / ( ) et decimales). A utiliser pour tout calcul.",
+    "Calcule le score de risque 0–100 et la sévérité à partir des facteurs likelihood/impact/exposure/blast_radius (formule §5). Utile pour les hypothèses 'et si'.",
   parameters: z.object({
-    expression: z
-      .string()
-      .describe("Expression a calculer, ex: '2 * (3 + 4.5)'"),
+    likelihood: z.number().min(0).max(1),
+    impact: z.number().min(0).max(1),
+    exposure: z.number().min(0).max(1),
+    blast_radius: z.number().min(1).default(1),
   }),
-  async execute({ expression }) {
-    if (!/^[\d\s+\-*/().]+$/.test(expression)) {
-      return JSON.stringify({
-        error: "Expression non autorisee : seuls chiffres et + - * / ( ) sont permis.",
-      });
-    }
-    try {
-      // Pas de eval() : on parse via Function sur une chaine deja validee par la regex.
-      const result = Function(`"use strict"; return (${expression});`)();
-      if (typeof result !== "number" || !Number.isFinite(result)) {
-        return JSON.stringify({ error: "Resultat invalide." });
-      }
-      return JSON.stringify({ expression, result });
-    } catch {
-      return JSON.stringify({ error: "Expression mal formee." });
-    }
+  async execute(f) {
+    return JSON.stringify(scoreRisk(f));
   },
 });
 
-/** Agent assistant general avec quelques outils de base. */
-export const assistant = new Agent({
-  name: "Assistant general",
+/** Liste les politiques Shield recommandées pour un risque WGS donné. */
+const listPolicies = tool({
+  name: "list_policies_for_risk",
+  description:
+    "Renvoie les politiques Shield recommandées (catalogue §6 + planchers) pour un identifiant de risque WGS (ex: WGS-R04).",
+  parameters: z.object({
+    taxonomy_id: z.string().describe("ID de risque WGS, ex: WGS-R01, WGS-R04."),
+  }),
+  async execute({ taxonomy_id }) {
+    return JSON.stringify({
+      risk: RISK_META[taxonomy_id] ?? null,
+      policies: policiesForRisk(taxonomy_id),
+    });
+  },
+});
+
+export const guardian = new Agent({
+  name: "Guardian Analyst (WGS)",
   model: MODEL,
   instructions: [
-    "Tu es un assistant general utile, precis et concis.",
-    "Reponds dans la langue de l'utilisateur.",
-    "Utilise l'outil calculator pour tout calcul plutot que de calculer de tete.",
-    "Utilise get_current_time pour toute question sur la date ou l'heure.",
-    "Si tu ne sais pas, dis-le clairement plutot que d'inventer.",
+    "Tu es l'analyste Guardian de WatchMyAgents (boucle Watch · Guardian · Shield).",
+    "Ton rôle (spec Guardian Core) : à partir d'un export d'actions, identifier les risques (taxonomie WGS-R01→R12 mappée OWASP Agentic), les présenter scorés, et proposer des politiques Shield avec objectif mesurable.",
+    "",
+    "Méthode OBLIGATOIRE :",
+    "1. Appelle `analyze_export_file` avec le chemin fourni. NE recalcule JAMAIS les scores toi-même : ils sont déterministes et viennent de l'outil.",
+    "2. Restitue les findings triés par sévérité décroissante.",
+    "3. Pour chaque finding : risque (WGS-Rxx + réf OWASP), score + sévérité + confiance, la preuve (event_id), et les politiques suggérées avec leur objectif.",
+    "",
+    "Principes non négociables de la spec :",
+    "- Tu SUGGÈRES, tu ne bloques pas : la décision d'enforcement revient à l'utilisateur (user-controlled).",
+    "- Confidence-gating : un score élevé mais peu confiant (confidence basse) se présente comme « à investiguer », pas « à bloquer ».",
+    "- Moindre intrusion : privilégie l'enforcement le moins intrusif atteignant l'objectif.",
+    "- Les politiques `mandatory:true` sont des planchers globaux non desserrables (tighten-only).",
+    "",
+    "Rends un rapport clair en français : un résumé (nb d'events, findings par sévérité), puis les findings priorisés, puis les actions recommandées. Concis, factuel, actionnable.",
   ].join("\n"),
-  tools: [getCurrentTime, calculator],
+  tools: [analyzeExportFile, scoreFinding, listPolicies],
 });
 
-export const tools = { getCurrentTime, calculator };
+export const tools = { analyzeExportFile, scoreFinding, listPolicies };

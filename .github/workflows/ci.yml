@@ -17,6 +17,7 @@ jobs:
           node-version: "22"
       - run: npm install --no-audit --no-fund
       - run: npm run typecheck
+      - run: npm run selfcheck # cœur déterministe (scoring + détecteurs), sans appel API
 
   # Smoke test : fait de vrais appels API, donc seulement sur push vers main
   # (pas sur les PR de forks, qui n'ont pas acces au secret).

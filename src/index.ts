@@ -1,12 +1,14 @@
 import "dotenv/config";
+import { resolve } from "node:path";
 import { run } from "@openai/agents";
-import { assistant, MODEL } from "./agent.js";
+import { guardian, MODEL } from "./agent.js";
 
 /**
- * Point d'entree CLI : passe ta question en argument, ou lance sans argument
- * pour utiliser la question de demo.
+ * CLI : analyse un export d'actions avec l'agent Guardian.
  *
- *   npm start -- "Quelle heure est-il a Paris ?"
+ *   npm start -- fixtures/example-export.json
+ *
+ * Sans argument, utilise la fixture de démo (exemple §13 : injection + exfil PII).
  */
 async function main() {
   if (!process.env.OPENAI_API_KEY) {
@@ -14,18 +16,19 @@ async function main() {
     process.exit(1);
   }
 
-  const question =
-    process.argv.slice(2).join(" ").trim() ||
-    "Combien font 12 % de 250, et quelle est la date d'aujourd'hui ?";
+  const path = resolve(process.argv[2] ?? "fixtures/example-export.json");
 
-  console.log(`Modele : ${MODEL}`);
-  console.log(`Question : ${question}\n`);
+  console.log(`Modèle : ${MODEL}`);
+  console.log(`Export : ${path}\n`);
 
-  const result = await run(assistant, question);
-  console.log("Reponse :\n" + result.finalOutput);
+  const result = await run(
+    guardian,
+    `Analyse l'export d'actions situé ici : ${path}. Produis le rapport Guardian.`,
+  );
+  console.log(result.finalOutput);
 }
 
 main().catch((err) => {
-  console.error("Echec de l'execution :", err);
+  console.error("Échec de l'analyse :", err);
   process.exit(1);
 });
