@@ -1,0 +1,76 @@
+name: Capture Fixtures
+
+# Run npm run capture-fixtures on CI and upload the 5 lifecycle event
+# JSON captures as artifact. Avoids needing OPENAI_API_KEY locally.
+#
+# Manual trigger only — fixtures should be captured deliberately, not
+# on every push.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verifier la configuration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Secret OPENAI_API_KEY absent."
+            exit 1
+          fi
+
+      - name: Lance capture-fixtures
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_AGENT_MODEL: ${{ vars.OPENAI_AGENT_MODEL }}
+        run: npm run capture-fixtures
+
+      - name: Verifier que les 5 fixtures ont ete capturees
+        run: |
+          echo "Contenu de fixtures/openai-events/ :"
+          ls -la fixtures/openai-events/ 2>/dev/null || (echo "::error::Dossier fixtures/openai-events/ inexistant" && exit 1)
+          MISSING=0
+          for evt in agent_start agent_end agent_handoff agent_tool_start agent_tool_end; do
+            if [ -f "fixtures/openai-events/${evt}.json" ]; then
+              echo "✅ ${evt}.json"
+              SIZE=$(wc -c < "fixtures/openai-events/${evt}.json")
+              echo "   taille : ${SIZE} bytes"
+            else
+              echo "::error::${evt}.json manquant"
+              MISSING=$((MISSING+1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "::error::$MISSING fixture(s) manquant(es) — re-run ou ajuster le prompt dans src/capture-fixtures.ts"
+            exit 1
+          fi
+
+      - name: Apercu d'un fixture (agent_tool_start)
+        run: |
+          if [ -f fixtures/openai-events/agent_tool_start.json ]; then
+            echo "::group::Premiere args de agent_tool_start"
+            head -100 fixtures/openai-events/agent_tool_start.json
+            echo "::endgroup::"
+          fi
+
+      - name: Upload des fixtures en artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openai-fixtures-${{ github.run_number }}
+          path: fixtures/openai-events/
+          retention-days: 30
+          if-no-files-found: error
