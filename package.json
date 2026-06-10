@@ -10,6 +10,7 @@
     "selfcheck": "tsx src/selfcheck.ts",
     "watch": "tsx src/watch.ts",
     "smoke": "tsx src/smoke-test.ts",
+    "capture-fixtures": "tsx src/capture-fixtures.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc"
   },
