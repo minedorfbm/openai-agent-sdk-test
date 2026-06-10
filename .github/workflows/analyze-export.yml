@@ -1,0 +1,81 @@
+name: Analyze Export
+
+# Runs the Guardian agent on any `exports/*.json` file committed to the
+# repo, then uploads the resulting report.md + findings.json as a
+# downloadable artifact.
+#
+# Triggers:
+#  - workflow_dispatch  : manual trigger from GitHub Actions UI
+#  - push to main       : when a new file lands in exports/
+#
+# The OPENAI_API_KEY secret is reused from the existing smoke workflow.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'exports/*.json'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verifier la configuration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Secret OPENAI_API_KEY absent. Ajoute-le dans Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "Exports a analyser :"
+          ls -la exports/*.json 2>/dev/null || (echo "::error::Aucun fichier .json dans exports/. Force-add un fichier (git add -f exports/...) et push." && exit 1)
+
+      - name: Lance Guardian (watch mode, timeout 5 min)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_AGENT_MODEL: ${{ vars.OPENAI_AGENT_MODEL }}
+        run: |
+          # watch.ts process tous les exports/*.json au demarrage,
+          # puis idle en mode watch. On le tue apres 5 min (largement
+          # suffisant pour traiter quelques dizaines d'events avec
+          # l'agent Guardian). On preserve l'exit code via timeout.
+          timeout --preserve-status 300s npm run watch || true
+
+      - name: Verifier que les rapports ont ete generes
+        run: |
+          echo "Contenu de exports/processed/ :"
+          ls -la exports/processed/ 2>/dev/null || echo "(dossier processed/ inexistant)"
+          if ls exports/processed/*.report.md 2>/dev/null; then
+            echo "✅ Rapports markdown trouves"
+            for f in exports/processed/*.report.md; do
+              echo ""
+              echo "::group::Apercu de $(basename "$f")"
+              head -80 "$f"
+              echo "..."
+              echo "::endgroup::"
+            done
+          else
+            echo "::warning::Aucun rapport markdown genere. Verifie les logs de l'etape Guardian."
+          fi
+
+      - name: Upload des rapports en artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guardian-reports-${{ github.run_number }}
+          path: |
+            exports/processed/
+          retention-days: 30
+          if-no-files-found: warn

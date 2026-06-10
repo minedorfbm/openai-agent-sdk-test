@@ -1,0 +1,742 @@
+{
+  "schema_version": "1.0",
+  "export": {
+    "export_id": "0dd7e4b3-94b9-4f90-97e8-3d007cfeddd1",
+    "generated_at": "2026-06-10T10:23:46.929Z",
+    "source": "wma-sdk@1.3.0",
+    "time_window": {
+      "start": "2026-05-22T11:26:04.879212Z",
+      "end": "2026-05-23T06:12:40.959Z"
+    },
+    "redaction_level": "pii_masked"
+  },
+  "fractal_context": {
+    "tenant_id": "tenant-arma",
+    "fleet_id": "fleet-research",
+    "teams": [],
+    "agents": [
+      {
+        "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+        "agent_type": "data_rag",
+        "model": "claude-sonnet-4-6",
+        "autonomy_level": "autonomous"
+      }
+    ]
+  },
+  "events": [
+    {
+      "event_id": "f58c41db-4f70-45c8-8f33-b6ed7c1c1788",
+      "timestamp": "2026-05-23T05:32:16.405009Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP"
+    },
+    {
+      "event_id": "1471a580-1b04-49e8-864d-73174643e7a1",
+      "timestamp": "2026-05-23T05:32:16.405019Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 512
+      }
+    },
+    {
+      "event_id": "8d555769-eab7-4304-b5c1-528d43ea92fe",
+      "timestamp": "2026-05-23T05:32:19.747167Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3342
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agent security attack vectors prompt injection tool misuse 2024 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "01efff5d-3d4d-4e77-b1a2-6bc78a3862fa",
+      "timestamp": "2026-05-23T05:32:19.747168Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3342
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agent cybersecurity defensive frameworks mitigations 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "726275ef-6f46-4165-91c9-b69b92945e40",
+      "timestamp": "2026-05-23T05:32:19.747169Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3342
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "real world AI agent security breaches incidents 2024 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "93a2b989-0eaf-4192-9532-1e6709591943",
+      "timestamp": "2026-05-23T05:32:19.747170Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3342
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agent security standards NIST OWASP regulations 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "19c7b68c-f3fe-4468-976d-5ddc8821188d",
+      "timestamp": "2026-05-23T05:32:19.747171Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3342
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "frontier research AI agent security adversarial attacks 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "614a8d80-4057-4e89-b5ec-dc6662bab0be",
+      "timestamp": "2026-05-23T05:32:26.989642Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "io": {
+        "input_tokens": 1,
+        "output_tokens": 315
+      }
+    },
+    {
+      "event_id": "bf9e478f-3294-4a17-a3b4-f82af545f217",
+      "timestamp": "2026-05-23T05:32:28.466607Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 1477
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_fetch",
+        "category": "http",
+        "parameters": {
+          "url": "https://genai.owasp.org/2025/12/09/owasp-genai-security-project-releases-top-10-risks-and-mitigations-for-agentic-ai-security/"
+        }
+      },
+      "security_context": {
+        "external_egress": true,
+        "destination": "genai.owasp.org"
+      }
+    },
+    {
+      "event_id": "7df5c4aa-4aa9-4adf-8868-46749da27544",
+      "timestamp": "2026-05-23T05:32:28.466608Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 1477
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "tool": {
+        "name": "web_fetch",
+        "category": "http",
+        "parameters": {
+          "url": "https://www.trendmicro.com/vinfo/us/security/news/threat-landscape/fault-lines-in-the-ai-ecosystem-trendai-state-of-ai-security-report"
+        }
+      },
+      "security_context": {
+        "external_egress": true,
+        "destination": "www.trendmicro.com"
+      }
+    },
+    {
+      "event_id": "3b463c21-f9cc-4c08-b153-75c1c41443e4",
+      "timestamp": "2026-05-23T05:35:26.141824Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_0124raycaH1nsK4wSEW3PhJP",
+      "io": {
+        "input_tokens": 1,
+        "output_tokens": 5964
+      }
+    },
+    {
+      "event_id": "23defa5f-f88f-4606-b128-43ab67ee440d",
+      "timestamp": "2026-05-22T11:26:13.346080Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "4391d6da-a845-412e-8e48-f965c554012f",
+      "timestamp": "2026-05-22T11:26:13.346090Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 552
+      }
+    },
+    {
+      "event_id": "03e1ba3c-05a2-4cc3-adef-3afed3ca08a2",
+      "timestamp": "2026-05-22T11:26:17.355238Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 4009
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents technical safety risks misalignment goal misgeneralization 2024 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "49a62d06-314d-4802-9932-7ff7eed2e289",
+      "timestamp": "2026-05-22T11:26:17.355239Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 4009
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents security risks prompt injection adversarial attacks 2024 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "df677dbb-2a0c-4a9e-8e06-e8fa1ce7859d",
+      "timestamp": "2026-05-22T11:26:17.355240Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 4009
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents societal ethical risks privacy bias job displacement 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "ec93eef2-b66e-42e1-bb7a-146a7141855b",
+      "timestamp": "2026-05-22T11:26:17.355241Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 4009
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents operational risks hallucination tool misuse cascading failures"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "6a0bc37d-eda9-420c-88c8-906807b58341",
+      "timestamp": "2026-05-22T11:26:17.355242Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 4009
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agent risks governance regulatory perspectives NIST EU AI Act 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "d0635057-4fc8-4270-92f0-ecbc0c1abf0f",
+      "timestamp": "2026-05-22T11:27:53.064160Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 1,
+        "output_tokens": 4057
+      }
+    },
+    {
+      "event_id": "80102315-6b1e-4c38-8069-46c77f4ba235",
+      "timestamp": "2026-05-22T11:36:42.928384Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "7b824556-ead1-4d41-b91b-ec7f36448c74",
+      "timestamp": "2026-05-22T11:36:42.928389Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 635
+      }
+    },
+    {
+      "event_id": "3ed32fc2-f59a-4063-8d82-26cf24ad4e6a",
+      "timestamp": "2026-05-22T11:38:41.359851Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "1871161f-5aa0-457f-82f3-18d382fe0d51",
+      "timestamp": "2026-05-22T11:38:41.359856Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 512
+      }
+    },
+    {
+      "event_id": "77aec893-119b-4c4b-9e88-d0ff06aec989",
+      "timestamp": "2026-05-22T11:39:42.558430Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "b39f5f09-f323-4441-946b-410a14144f6b",
+      "timestamp": "2026-05-22T11:39:42.558435Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 808
+      }
+    },
+    {
+      "event_id": "29a6e803-f69f-498e-ac8e-9a9433b7ffa7",
+      "timestamp": "2026-05-22T11:44:43.758876Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "56a2c706-c5cb-434c-92b8-b51cbf3ab817",
+      "timestamp": "2026-05-22T11:44:43.758885Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 309
+      }
+    },
+    {
+      "event_id": "4752d860-9f91-4a2c-8ea8-859fc2216e16",
+      "timestamp": "2026-05-22T11:44:47.502286Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3744
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents technical safety risks misalignment 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "02789876-2fc5-4f8d-8573-89ccb6e4dc74",
+      "timestamp": "2026-05-22T11:44:47.502287Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3744
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents prompt injection security risks 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "9c44d1fa-1da5-449c-96c1-3567e34390ed",
+      "timestamp": "2026-05-22T11:44:47.502288Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3744
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents societal risks bias job displacement privacy 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "ed8e4387-207a-4489-8ce2-cfe33e8cf856",
+      "timestamp": "2026-05-22T11:44:47.502289Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3744
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents operational risks hallucination cascading failures multi-agent"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "172d5949-9128-4632-a064-96498c6f3d5b",
+      "timestamp": "2026-05-22T11:44:47.502290Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3744
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents governance regulation EU AI Act NIST 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "4e0161b9-b85c-4a04-9dff-d459d290ccc4",
+      "timestamp": "2026-05-22T11:46:18.470383Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 1,
+        "output_tokens": 4060
+      }
+    },
+    {
+      "event_id": "bf8a776b-0e27-4ead-8e51-187b601fb401",
+      "timestamp": "2026-05-22T11:50:05.590661Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "user_message",
+      "result": {
+        "status": "success"
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9"
+    },
+    {
+      "event_id": "5de3affc-838e-440e-973a-a4fa81e22dba",
+      "timestamp": "2026-05-22T11:50:05.590670Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 3,
+        "output_tokens": 436
+      }
+    },
+    {
+      "event_id": "8a0e726e-76b5-4d03-b8fc-ed6e758e1140",
+      "timestamp": "2026-05-22T11:50:08.937652Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3347
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents cybersecurity attack vectors prompt injection 2025 2026"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "91093f94-2ea4-4be4-8421-cb6ae91c9170",
+      "timestamp": "2026-05-22T11:50:08.937653Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3347
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents used as cyberattack tools threat actors malicious use 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "e53fad9a-3941-4425-899a-87fe51404a58",
+      "timestamp": "2026-05-22T11:50:08.937654Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3347
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agents identity access management IAM privilege escalation risks 2025"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "f8aa11c4-355d-4780-b433-7fd865ceefa3",
+      "timestamp": "2026-05-22T11:50:08.937655Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3347
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "AI agent supply chain security MCP tool poisoning risks 2025 2026"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "a3a48c66-5254-474c-a8e8-9c15e5d1fe29",
+      "timestamp": "2026-05-22T11:50:08.937656Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "network_egress",
+      "result": {
+        "status": "success",
+        "duration_ms": 3347
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "tool": {
+        "name": "web_search",
+        "category": "http",
+        "parameters": {
+          "query": "OWASP agentic AI top 10 security risks 2025 2026"
+        }
+      },
+      "security_context": {
+        "external_egress": true
+      }
+    },
+    {
+      "event_id": "3f349c74-d70e-4108-839b-76440dd2f9be",
+      "timestamp": "2026-05-22T11:52:01.136938Z",
+      "agent_id": "agent_01XaNB4M88ZvcW8FoQ5GC14A",
+      "type": "llm_call",
+      "result": {
+        "status": "success",
+        "duration_ms": 0
+      },
+      "session_id": "sesn_01GcFcvg6SceTwfborQEWcV9",
+      "io": {
+        "input_tokens": 1,
+        "output_tokens": 4836
+      }
+    }
+  ]
+}
